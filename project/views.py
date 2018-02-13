@@ -1,6 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, \
 	url_for, g
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 # Config
 app = Flask(__name__)
@@ -74,11 +75,13 @@ def new_task():
 	form = AddTaskForm(request.form)
 	if request.method == 'POST':
 		if form.validate_on_submit():
-			# WHY ARE WE STILL HARDCODING?!
+			# WHY ARE WE STILL HARDCODING?! (Now with MOAR hardcoding)
 			new_task = Task(
 				form.name.data,
 				form.due_date.data,
 				form.priority.data,
+				datetime.utcnow(),
+				'1',
 				'1'
 			)
 			db.session.add(new_task)
