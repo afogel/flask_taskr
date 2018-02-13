@@ -5,7 +5,8 @@ from flask import Flask, flash, redirect, render_template, request, session, \
 app = Flask(__name__)
 app.config.from_object('_config') #neat, I should probably look at docs for this
 
-# Import helpers
+# Import custom dependencies
+from forms import AddTaskForm
 from helpers import connect_db, login_required
 
 # Route handlers
@@ -28,7 +29,7 @@ def login():
 			return redirect(url_for('tasks'))
 	return render_template('login.html')
 
-@app.route('/tasks')
+@app.route('/tasks/')
 @login_required
 def tasks():
 	# Pretty onerous to have to explicitly call using SQL. WHERE IS THE ORM?!
@@ -44,7 +45,7 @@ def tasks():
 	cursor = g.db.execute('''
 		SELECT name, due_date, priority, task_id FROM tasks WHERE status=0
 	''')
-	closed_tasks = = [
+	closed_tasks = [
 		dict(name=row[0], due_date=row[1], priority=row[2], task_id=row[3]) \
 			for row in cursor.fetchall()
 	]
