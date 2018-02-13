@@ -1,11 +1,12 @@
-from flask import Flask, flash, redirect, render_template, request, session \
+from flask import Flask, flash, redirect, render_template, request, session, \
 	url_for
-
-from helpers import connect_db, login_required
 
 # Config
 app = Flask(__name__)
 app.config.from_object('_config') #neat, I should probably look at docs for this
+
+# Import helpers
+from helpers import connect_db, login_required
 
 # Route handlers
 @app.route('/logout')
