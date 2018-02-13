@@ -1,10 +1,6 @@
-import sqlite3
 from functools import wraps
 from views import app
 from flask import flash, redirect, session, url_for
-
-def connect_db():
-	return sqlite3.connect(app.config['DATABASE_PATH'])
 
 def login_required(test):
 	@wraps(test)
