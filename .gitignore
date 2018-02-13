@@ -3,3 +3,4 @@ __pycache__
 flasktaskr.db
 *.DS_Store
 project/_config.py
+*.pyc
