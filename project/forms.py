@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, DateField, IntegerField, SelectField, \
 	PasswordField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, EqualTo, Email
 
 class AddTaskForm(Form):
 	task_id = IntegerField()
@@ -26,13 +26,13 @@ class RegistrationForm(Form):
 		DataRequired(), Length(min=6, max=25)
 	])
 	email = StringField('Email', validators=[
-		DataRequired(), Length(min=6, max=40)
+		DataRequired(), Length(min=6, max=40), Email()
 	])
 	password = PasswordField('Password', validators = [
 		DataRequired(), Length(min=6, max=40)
 	])
 	confirm = PasswordField('Confirm Password', validators = [
-		DataRequired(), Length(min=6, max=40)
+		DataRequired(), EqualTo('password')
 	])
 
 class LoginForm(Form):
