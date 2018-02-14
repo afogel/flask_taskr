@@ -24,6 +24,7 @@ def login():
 			account = Account.query.filter_by(name=form.name.data).first()
 			if account is not None and account.password == form.password.data:
 				session['logged_in'] = True
+				session['account_id'] = account.id
 				flash('Welcome!')
 				return redirect(url_for('tasks'))
 			else:
@@ -35,6 +36,7 @@ def login():
 @app.route('/logout')
 def logout():
 	session.pop('logged_in', None)
+	session.pop('account_id', None)
 	flash('Goodbye!')
 	return redirect(url_for('login'))
 
@@ -82,7 +84,7 @@ def new_task():
 				form.priority.data,
 				datetime.utcnow(),
 				'1',
-				'1'
+				session['account_id']
 			)
 			db.session.add(new_task)
 			db.session.commit()
