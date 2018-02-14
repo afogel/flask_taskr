@@ -1,5 +1,5 @@
 
-from views import db
+from view_controller import db
 from models import Task
 from datetime import date
 

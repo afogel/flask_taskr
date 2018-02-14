@@ -1,4 +1,4 @@
-from views import db
+from view_controller import db
 from _config import DATABASE_PATH
 
 import sqlite3
