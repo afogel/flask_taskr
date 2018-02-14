@@ -10,8 +10,9 @@ db = SQLAlchemy(app)
 
 # Import custom dependencies
 from forms import AddTaskForm, RegistrationForm, LoginForm
-from helpers import login_required
 from models import Task, Account
+from helpers.controller import login_required, flash_errors
+from helpers.queries import open_tasks, closed_tasks
 
 # Route handlers
 
@@ -61,17 +62,14 @@ def register():
 @app.route('/tasks/')
 @login_required
 def tasks():
-	task_order = Task.due_date.asc()
-	open_tasks = db.session.query(Task).filter_by(status='1').order_by(task_order)
-	closed_tasks = db.session.query(Task).filter_by(status='0').order_by(task_order)
 	return render_template(
 		'tasks.html',
 		form=AddTaskForm(request.form),
-		open_tasks=open_tasks,
-		closed_tasks=closed_tasks
+		open_tasks = open_tasks(),
+		closed_tasks = closed_tasks()
 	)
 
-@app.route('/add', methods=['POST'])
+@app.route('/add', methods=['GET','POST'])
 @login_required
 def new_task():
 	form = AddTaskForm(request.form)
@@ -91,8 +89,12 @@ def new_task():
 			flash('New entry successfully posted. Thanks.')
 			return redirect(url_for('tasks'))
 		else:
-			flash('All fields are required. Please try again.') 
-			return redirect(url_for('tasks'))
+			return render_template(
+				'tasks.html',
+				form=form,
+				open_tasks = open_tasks(),
+				closed_tasks = closed_tasks()
+			)
 
 
 @app.route('/complete/<int:task_id>')

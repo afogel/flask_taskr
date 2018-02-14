@@ -1,6 +1,7 @@
 from view_controller import db
 
 from datetime import datetime
+from sqlalchemy.ext.hybrid import hybrid_property
 
 class Task(db.Model):
 	__tablename__ = 'tasks'
@@ -24,6 +25,14 @@ class Task(db.Model):
 
 	def __repr__(self):
 		return '<name {0}>'.format(self.name)
+
+	@hybrid_property
+	def open(self):
+		return self.status == '1'
+
+	@hybrid_property
+	def closed(self):
+		return self.status == '0'
 
 
 class Account(db.Model):
