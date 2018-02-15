@@ -1,6 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, \
 	url_for, g
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 
 # Config
@@ -53,10 +54,14 @@ def register():
 				form.email.data,
 				form.password.data
 			) # need to encrypt password
-			db.session.add(new_account)
-			db.session.commit()
-			flash('Thanks for registering. Please login.')
-			return redirect(url_for('login'))
+			try:
+				db.session.add(new_account)
+				db.session.commit()
+				flash('Thanks for registering. Please login.')
+				return redirect(url_for('login'))
+			except IntegrityError:
+				flash('That username and/or email already exists. Please try again.')
+				return render_template('register.html', form=form, error=error)
 	return render_template('register.html', form=form, error=error)
 
 @app.route('/tasks/')
