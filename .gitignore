@@ -4,3 +4,4 @@ flasktaskr.db
 *.DS_Store
 project/_config.py
 *.pyc
+test.db
